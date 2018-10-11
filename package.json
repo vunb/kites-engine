@@ -5,7 +5,11 @@
   "description": "Core Engine of Kites",
   "main": "index.js",
   "scripts": {
-    "test": "node test | tap-spec"
+    "build": "tsc && npm run lint",
+    "clean": "rimraf ./dist",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "tsc": "tsc",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
