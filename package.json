@@ -39,8 +39,11 @@
   },
   "devDependencies": {
     "@types/app-root-path": "^1.2.4",
+    "@types/bluebird": "^3.5.24",
     "@types/chai": "^4.1.6",
+    "@types/debug": "^0.0.31",
     "@types/lodash": "^4.14.117",
+    "@types/mkdirp": "^0.5.2",
     "@types/mocha": "^5.2.5",
     "@types/nconf": "^0.0.37",
     "@types/node": "^10.11.7",
