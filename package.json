@@ -1,9 +1,9 @@
 {
   "name": "@kites/engine",
   "displayName": "kites",
-  "version": "0.1.5",
+  "version": "2.0.0",
   "description": "Core Engine of Kites",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "build": "tsc && npm run lint",
     "clean": "rimraf ./dist",
@@ -38,7 +38,14 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "@types/app-root-path": "^1.2.4",
+    "@types/chai": "^4.1.6",
+    "@types/lodash": "^4.14.117",
+    "@types/mocha": "^5.2.5",
+    "@types/nconf": "^0.0.37",
     "@types/node": "^10.11.7",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
     "rimraf": "^2.6.2",
     "std-mocks": "^1.0.1",
     "supertest": "^2.0.1",

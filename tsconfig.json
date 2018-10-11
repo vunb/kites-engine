@@ -5,6 +5,7 @@
     "module": "commonjs",
     /* Enable all strict type-checking options. */
     "strict": true,
+    "strictPropertyInitialization": false,
     "esModuleInterop": true,
     /* Compile options*/
     "outDir": "dist",
