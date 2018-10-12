@@ -12,3 +12,8 @@
 2. npm install -g tslint@latest
 3. yarn add --dev ts-node tslint typescript typescript-eslint-parser @types/node rimraf
 
+# Visual Studio Code IDE
+
+* VS Code 1.25.0
+* Editor for VS Code
+* GitLens

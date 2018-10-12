@@ -8,7 +8,7 @@ import {LoggerInstance, MemoryTransportInstance} from "winston";
 import { EventEmitter } from "events";
 import { EventCollectionEmitter } from "./engine/event-collection";
 import { ExtensionsManager } from "./extensions/extensions-manager";
-import { DebugTransport } from "./logger/debug-transport";
+import { ILogger, DebugTransport } from "./logger";
 
 import pkg from "../package.json";
 
@@ -18,7 +18,7 @@ export interface IKitesOptions {
     readonly appDirectory:string;
     readonly parentModuleDirectory:string;
     readonly env:string;
-    readonly logger:any;
+    readonly logger:ILogger;
 }
 
 export class KitesCore extends EventEmitter {
@@ -28,7 +28,7 @@ export class KitesCore extends EventEmitter {
     options:IKitesOptions;
     initializeListeners:EventCollectionEmitter;
     extensionsManager:ExtensionsManager;
-    logger:LoggerInstance;
+    logger:ILogger;
     private _initialized:boolean;
     private _fnAfterConfigLoaded:Function;
     private _ready:Promise<KitesCore>;

@@ -27,7 +27,7 @@ describe('EventCollectionEmitter', () => {
         expect(result).eq(2.0);
     })
 
-    it('should got and error!', async () => {
+    it('should got an error!', async () => {
         try {
             listeners.add('test', () => Promise.reject('foo'));
             await listeners.fire();
