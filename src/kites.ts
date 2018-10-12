@@ -46,7 +46,7 @@ export class KitesCore extends EventEmitter {
         this.extensionsManager = new ExtensionsManager(this);
 
         // properties
-        this.logger = this._initWinston();
+        // this.logger = this._initWinston();
         this._initialized = false;
         this._fnAfterConfigLoaded = () => this;
         this._ready = new Promise((resolve) => {
@@ -114,20 +114,20 @@ export class KitesCore extends EventEmitter {
     }
 
     init() {
-        return this._initOptions().then(() => {
-            if (this.options.logger && this.options.logger.silent === true) {
-                this._silentLogs(this.logger);
-            }
+        // return this._initOptions().then(() => {
+        //     if (this.options.logger && this.options.logger.silent === true) {
+        //         this._silentLogs(this.logger);
+        //     }
 
-            this.logger.info(`Initializing ${this.name}@${this.version} in mode "${this.options.env}"${this.options.loadConfig? ', using configuration file ' + this.options.configFile : ''}`);
-            return this.extensionsManager.init();
-        }).then(() => {
-            return this.initializeListeners.fire();
-        }).then(() => {
-            this.logger.info('kites initialized!');
-            this._initialized = true;
-            this.emit('initialized', this);
-            return this;
-        })
+        //     this.logger.info(`Initializing ${this.name}@${this.version} in mode "${this.options.env}"${this.options.loadConfig? ', using configuration file ' + this.options.configFile : ''}`);
+        //     return this.extensionsManager.init();
+        // }).then(() => {
+        //     return this.initializeListeners.fire();
+        // }).then(() => {
+        //     this.logger.info('kites initialized!');
+        //     this._initialized = true;
+        //     this.emit('initialized', this);
+        //     return this;
+        // })
     }
 }
