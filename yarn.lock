@@ -40,6 +40,10 @@
   version "10.11.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.7.tgz#0e75ca9357d646ca754016ca1d68a127ad7e7300"
 
+"@types/std-mocks@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/std-mocks/-/std-mocks-1.0.0.tgz#1d4015e9b16ef4b4acc94860e7fb00b6b4db8530"
+
 acorn-jsx@^3.0.0:
   version "3.0.1"
   resolved "http://registry.npmjs.org/acorn-jsx/-/acorn-jsx-3.0.1.tgz#afdf9488fb1ecefc8348f6fb22f464e32a58b36b"

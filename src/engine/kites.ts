@@ -13,7 +13,7 @@ import { EventCollectionEmitter } from './event-collection';
 
 import winston = require('winston');
 import pkg from '../../package.json';
-import { KitesExtention } from '../extensions/extensions';
+import { KitesExtensionDefinition, KitesExtention } from '../extensions/extensions';
 
 /**
  * Default to create a new Kites
@@ -42,7 +42,7 @@ export interface IKitesOptions {
     mode?: string;
     cacheAvailableExtensions?: any;
     tempDirectory?: string;
-    extensionsLocationCache?: string;
+    extensionsLocationCache?: boolean;
     extensions?: string[];
 }
 
@@ -55,7 +55,6 @@ export class KitesCore extends EventEmitter {
     initializeListeners: EventCollectionEmitter;
     extensionsManager: ExtensionsManager;
     logger: LoggerInstance;
-    private initialized: boolean;
     private fnAfterConfigLoaded: Function;
     private isReady: Promise<KitesCore>;
 
@@ -73,7 +72,6 @@ export class KitesCore extends EventEmitter {
 
         // properties
         this.logger = this._initWinston();
-        this.initialized = false;
         this.fnAfterConfigLoaded = () => this;
         this.isReady = new Promise((resolve) => {
             this.on('initialized', resolve);
@@ -160,7 +158,7 @@ export class KitesCore extends EventEmitter {
      * TODO: pass string to load folder and discover extension Function in this path
      * @param extension
      */
-    use(extension: Function|KitesExtention) {
+    use(extension: KitesExtention|KitesExtensionDefinition) {
         this.extensionsManager.use(extension);
         return this;
     }
@@ -197,7 +195,6 @@ export class KitesCore extends EventEmitter {
         await this.initializeListeners.fire();
 
         this.logger.info('kites initialized!');
-        this.initialized = true;
         this.emit('initialized', this);
         return this;
     }

@@ -47,6 +47,7 @@
     "@types/mocha": "^5.2.5",
     "@types/nconf": "^0.0.37",
     "@types/node": "^10.11.7",
+    "@types/std-mocks": "^1.0.0",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "rimraf": "^2.6.2",

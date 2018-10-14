@@ -1,12 +1,11 @@
-import { IKitesOptions } from '../engine/kites';
 import { KitesCore } from '../main';
 
-export type ExtensionMainDefinition = (kites: KitesCore, options: IKitesOptions) => void;
+export type KitesExtensionDefinition = (kites: KitesCore, definition: KitesExtention) => void;
 
 export class KitesExtention {
-    main: Function|ExtensionMainDefinition;
+    main: Function|KitesExtensionDefinition;
     name: string;
     options?: boolean|any;
     directory: string;
-    dependencies?: Array<string|Function>;
+    dependencies?: Array<string|Function|KitesExtensionDefinition>;
 }

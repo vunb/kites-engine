@@ -4,7 +4,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { KitesCore } from '../main';
 import { discover } from './discover';
-import { ExtensionMainDefinition, KitesExtention } from './extensions';
+import { KitesExtensionDefinition, KitesExtention } from './extensions';
 import sorter from './sorter';
 
 export class ExtensionsManager extends EventEmitter {
@@ -31,7 +31,7 @@ export class ExtensionsManager extends EventEmitter {
      * Use a kites extension
      * @param extension
      */
-    use(extension: Function|KitesExtention|ExtensionMainDefinition) {
+    use(extension: KitesExtention|KitesExtensionDefinition) {
         if (typeof extension === 'function') {
             this.usedExtensions.push({
                 dependencies: [],
