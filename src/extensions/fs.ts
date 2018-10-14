@@ -1,6 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 
+/**
+ * Delete file and folder
+ * @param path path to delete
+ */
 export function deleteFiles(path:string) {
     try {
         let files = fs.readdirSync(path);
@@ -19,6 +23,13 @@ export function deleteFiles(path:string) {
     }
 }
 
+/**
+ * Walk and find files by filename or regex
+ *
+ * @param rootPath
+ * @param fileName template for searching
+ * @param exclude template to exclude
+ */
 export function walkSync(rootPath:string, fileName:string, exclude?:string|RegExp): string[] {
     let results:string[] = [];
     let queue:string[] = [];
