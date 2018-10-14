@@ -15,5 +15,6 @@
 # Visual Studio Code IDE
 
 * VS Code 1.25.0
-* Editor for VS Code
+* EditorConfig for VS Code
+* TSLint for VS Code
 * GitLens

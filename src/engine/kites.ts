@@ -6,11 +6,11 @@ import * as nconf from "nconf";
 import {LoggerInstance, MemoryTransportInstance} from "winston";
 
 import { EventEmitter } from "events";
-import { EventCollectionEmitter } from "./engine/event-collection";
-import { ExtensionsManager } from "./extensions/extensions-manager";
-import { ILogger, DebugTransport } from "./logger";
+import { EventCollectionEmitter } from "./event-collection";
+import { ExtensionsManager } from "../extensions/extensions-manager";
+import { ILogger, DebugTransport } from "../logger";
 
-import pkg from "../package.json";
+import pkg from "../../package.json";
 
 export interface IKitesOptions {
     readonly discover:boolean;

@@ -1,14 +1,11 @@
 import { EventEmitter } from "events";
-import { KitesCore } from "../kites";
-
-export interface IKitesExtention {
-    readonly options:boolean|any;
-}
+import { KitesCore } from "../main";
+import { KitesExtention } from "./extensions";
 
 export class ExtensionsManager extends EventEmitter {
     kites:KitesCore;
-    availableExtensions:Array<IKitesExtention>;
-    usedExtensions:Array<IKitesExtention>;
+    availableExtensions:Array<KitesExtention>;
+    usedExtensions:Array<KitesExtention>;
 
     constructor(kites:KitesCore) {
         super()

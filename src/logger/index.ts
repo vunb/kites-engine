@@ -1,13 +1,31 @@
-import winston from "winston";
+import * as winston from "winston";
+import * as path from "path";
+import {DebugTransport} from "./debug-transport";
 
-export interface LogMethod extends winston.LogMethod {
+export {DebugTransport} from './debug-transport';
+
+export default function InitDebugLogger(name: string): winston.LoggerInstance {
+    if (!winston.loggers.has(name)) {
+        let debugTransport = new DebugTransport();
+        winston.loggers.add(name, {
+            transports: [debugTransport]
+        })
+
+        winston.loggers.get(name).on('error', (err) => {
+            if (err.code === 'ENOENT') {
+                var msg = err;
+                if (path.dirname(err.path) === '.') {
+                    msg = 'Error from logger (winston) while trying to use a file to store logs:'
+                } else {
+                    msg = 'Error from logger (winston) while trying to use a file to store logs, if the directory "' + err.path + '" does not exists please create it:'
+                }
+                // make the error intentionally more visible to get the attention of the user
+                console.error('------------------------');
+                console.error(msg, err);
+                console.error('------------------------');
+            }
+        })
+    }
+
+    return winston.loggers.get(name);
 }
-
-export interface ILogger {
-    info:LogMethod;
-    warn:LogMethod;
-    error:LogMethod;
-    debug:LogMethod;
-}
-
-export {DebugTransport} from './debug-transport'
