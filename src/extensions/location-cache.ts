@@ -8,11 +8,12 @@ import { IDiscoverOptions } from "./discover";
 import { KitesExtention } from "./extensions";
 import { walkSync } from "./fs";
 
-const KITES_CONFIG_FILE = 'kites.config.js';
 const mkdirp = promisify(_mkdirp);
 const stat = promisify(_fs.stat);
 const readFile = promisify(_fs.readFile);
 const writeFile = promisify(_fs.writeFile);
+
+const KITES_CONFIG_FILE = 'kites.config.js';
 // var pathToLocationCache:string;
 
 export async function get(config:IDiscoverOptions) {
