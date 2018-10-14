@@ -5,6 +5,7 @@ export interface ICollectionItem {
 }
 
 export class EventCollectionEmitter {
+    [key:string]: any;
     private listeners: ICollectionItem[];
     private preHooks: Function[];
     private postHooks: Function[];
@@ -76,7 +77,7 @@ export class EventCollectionEmitter {
      * @returns {Promise<U>}
      */
     async fire(...args: object[]) {
-        var self = this;
+        var self: EventCollectionEmitter = this;
 
         function mapSeries(arr:any[], next:Function) {
             // create a empty promise to start our series
@@ -91,8 +92,8 @@ export class EventCollectionEmitter {
         }
 
         function applyHook(listener:ICollectionItem, hookArrayName: string, outerArgs: any[]) {
-            var hooks = (self as any)[hookArrayName];
-            hooks.forEach((hook:Function) => {
+            var hooks = self[hookArrayName] as Function[];
+            hooks.forEach((hook) => {
                 try {
                     hook.apply(listener, outerArgs);
                 } catch (err) {
@@ -106,17 +107,17 @@ export class EventCollectionEmitter {
                 return null;
             }
             var currentArgs = args.slice(0);
-            applyHook(listener, '_pre', currentArgs);
+            applyHook(listener, 'preHooks', currentArgs);
 
             try {
                 let valOrPromise = listener.fn.apply(listener.context, currentArgs);
                 let result = await Promise.resolve(valOrPromise);
-                applyHook(listener, '_post', currentArgs);
+                applyHook(listener, 'postHooks', currentArgs);
                 return result;
             } catch (err) {
                 currentArgs.unshift(err);
                 // console.warn('Event listener got an error!', err);
-                applyHook(listener, '_postFail', currentArgs);
+                applyHook(listener, 'postFailHooks', currentArgs);
                 return Promise.reject(err);
             }
         });
