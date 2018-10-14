@@ -16,7 +16,7 @@ const writeFile = promisify(_fs.writeFile);
 const KITES_CONFIG_FILE = 'kites.config.js';
 // var pathToLocationCache:string;
 
-export async function get(config:IDiscoverOptions) {
+export async function get(config: IDiscoverOptions) {
     let tempDirectory = config.tempDirectory || os.tmpdir();
     let pathToLocationCache = path.join(tempDirectory, 'extensions', 'locations.json');
 
@@ -46,7 +46,7 @@ export async function get(config:IDiscoverOptions) {
         }
 
         // return cached
-        await Promise.all(cache.locations.map((dir:string) => stat(dir)));
+        await Promise.all(cache.locations.map((dir: string) => stat(dir)));
         config.logger.info('Extensions location cache contains up to date information, skipping crawling in ' + config.rootDirectory);
 
         let directories = walkSync(config.rootDirectory, KITES_CONFIG_FILE, location);
@@ -58,7 +58,7 @@ export async function get(config:IDiscoverOptions) {
     }
 }
 
-export async function save(extensions:KitesExtention[], config:IDiscoverOptions) {
+export async function save(extensions: KitesExtention[], config: IDiscoverOptions) {
     let location = path.join(__dirname, '../../../');
     let directories = extensions
     .map((e) => path.join(e.directory, KITES_CONFIG_FILE))
@@ -71,10 +71,10 @@ export async function save(extensions:KitesExtention[], config:IDiscoverOptions)
     await mkdirp(pathToLocationCache);
     await (stat(fileToLocationCache).catch(() => writeFile(fileToLocationCache, JSON.stringify({}), 'utf-8')));
     let content = await readFile(fileToLocationCache, 'utf-8');
-    let nodes:any = {};
+    let nodes: any = {};
     try {
         nodes = JSON.parse(content);
-    } catch(err) {
+    } catch (err) {
         // file is corrupted, nevermind and override all
     }
 

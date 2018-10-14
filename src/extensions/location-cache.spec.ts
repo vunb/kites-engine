@@ -11,7 +11,7 @@ describe('Location cache', () => {
     });
 
     it('should get one and save it!', async () => {
-        let extensions:any = await cache.get({
+        let extensions: any = await cache.get({
             logger: InitDebugLogger('location-cache'),
             rootDirectory: resolve('test')
         });

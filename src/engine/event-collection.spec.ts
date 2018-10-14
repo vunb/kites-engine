@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { EventCollectionEmitter, ICollectionItem } from './event-collection';
 
 describe('EventCollectionEmitter', () => {
-    var listeners:EventCollectionEmitter;
+    var listeners: EventCollectionEmitter;
     beforeEach(() => {
         listeners = new EventCollectionEmitter();
     });
@@ -16,8 +16,8 @@ describe('EventCollectionEmitter', () => {
     });
 
     it('should fire with arguments', async () => {
-        let obj:any = {};
-        listeners.add('test', (o:any) => {
+        let obj: any = {};
+        listeners.add('test', (o: any) => {
             o.ic = 'kites framework';
             return 2.0;
         });
@@ -39,7 +39,7 @@ describe('EventCollectionEmitter', () => {
     it('should apply pre hooks', async () => {
         let i = 0;
         let preHookResult;
-        listeners.pre(function(this:ICollectionItem) {
+        listeners.pre(function(this: ICollectionItem) {
             i++;
             preHookResult = this.key;
         });
@@ -59,7 +59,7 @@ describe('EventCollectionEmitter', () => {
     it('should apply post hooks', async () => {
         let i = 0;
         let postHookResult;
-        listeners.post(function(this:ICollectionItem) {
+        listeners.post(function(this: ICollectionItem) {
             i++;
             postHookResult = this.key;
         });
@@ -78,7 +78,7 @@ describe('EventCollectionEmitter', () => {
 
     it('should apply postError hooks', async () => {
         let error;
-        listeners.postFail((err:Error) => {
+        listeners.postFail((err: Error) => {
             error = err;
         });
 

@@ -5,7 +5,7 @@ import * as path from 'path';
  * Delete file and folder
  * @param pathToDelete path to delete
  */
-export function deleteFiles(pathToDelete:string) {
+export function deleteFiles(pathToDelete: string) {
     try {
         let files = fs.readdirSync(pathToDelete);
         files.forEach(fn => {
@@ -30,18 +30,18 @@ export function deleteFiles(pathToDelete:string) {
  * @param fileName template for searching
  * @param exclude template to exclude
  */
-export function walkSync(rootPath:string, fileName:string, exclude?:string|RegExp): string[] {
-    let results:string[] = [];
-    let queue:string[] = [];
-    let next:string|undefined = rootPath;
+export function walkSync(rootPath: string, fileName: string, exclude?: string|RegExp): string[] {
+    let results: string[] = [];
+    let queue: string[] = [];
+    let next: string|undefined = rootPath;
 
-    function dirname(fn:string) {
+    function dirname(fn: string) {
         let parts = path.dirname(fn).split(path.sep);
         return parts[parts.length - 1];
     }
 
     while (next) {
-        let list:string[];
+        let list: string[];
         try {
             list = fs.readdirSync(next);
         } catch (err) {

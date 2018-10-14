@@ -1,11 +1,11 @@
 export interface ICollectionItem {
-    readonly key:string;
-    readonly fn:Function;
-    readonly context:object|Function;
+    readonly key: string;
+    readonly fn: Function;
+    readonly context: object|Function;
 }
 
 export class EventCollectionEmitter {
-    [key:string]: any;
+    [key: string]: any;
     private listeners: ICollectionItem[];
     private preHooks: Function[];
     private postHooks: Function[];
@@ -25,10 +25,10 @@ export class EventCollectionEmitter {
      * @param listener
      */
     add(key: string, context: Object|Function, listener?: Function) {
-        let ctx = listener == null ? this: context;
+        let ctx = listener == null ? this : context;
         let fn = listener || context as Function;
 
-        if(typeof fn !== 'function') {
+        if (typeof fn !== 'function') {
             throw new Error('Listener must be a function!');
         }
 
@@ -43,7 +43,7 @@ export class EventCollectionEmitter {
      * Remove the listener specified by its key from the collection
      * @param key
      */
-    remove(key:string) {
+    remove(key: string) {
         this.listeners = this.listeners.filter(x => x.key !== key);
     }
 
@@ -79,7 +79,7 @@ export class EventCollectionEmitter {
     async fire(...args: object[]) {
         var self: EventCollectionEmitter = this;
 
-        function mapSeries(arr:any[], next:Function) {
+        function mapSeries(arr: any[], next: Function) {
             // create a empty promise to start our series
             var currentPromise = Promise.resolve();
             var promises = arr.map(async (item) => {
@@ -91,7 +91,7 @@ export class EventCollectionEmitter {
             return Promise.all(promises);
         }
 
-        function applyHook(listener:ICollectionItem, hookArrayName: string, outerArgs: any[]) {
+        function applyHook(listener: ICollectionItem, hookArrayName: string, outerArgs: any[]) {
             var hooks = self[hookArrayName] as Function[];
             hooks.forEach((hook) => {
                 try {
@@ -102,7 +102,7 @@ export class EventCollectionEmitter {
             });
         }
 
-        return await mapSeries(this.listeners, async (listener:ICollectionItem) => {
+        return await mapSeries(this.listeners, async (listener: ICollectionItem) => {
             if (!listener) {
                 return null;
             }

@@ -13,27 +13,27 @@ import { EventCollectionEmitter } from './event-collection';
 import pkg from '../../package.json';
 
 export interface IKitesOptions {
-    readonly discover:boolean;
-    readonly rootDirectory:string;
-    readonly appDirectory:string;
-    readonly parentModuleDirectory:string;
-    readonly env:string;
-    readonly logger:LoggerInstance;
+    readonly discover: boolean;
+    readonly rootDirectory: string;
+    readonly appDirectory: string;
+    readonly parentModuleDirectory: string;
+    readonly env: string;
+    readonly logger: LoggerInstance;
 }
 
 export class KitesCore extends EventEmitter {
 
-    name:string;
-    version:string;
-    options:IKitesOptions;
-    initializeListeners:EventCollectionEmitter;
-    extensionsManager:ExtensionsManager;
-    logger:LoggerInstance;
-    private initialized:boolean;
-    private fnAfterConfigLoaded:Function;
-    private isReady:Promise<KitesCore>;
+    name: string;
+    version: string;
+    options: IKitesOptions;
+    initializeListeners: EventCollectionEmitter;
+    extensionsManager: ExtensionsManager;
+    logger: LoggerInstance;
+    private initialized: boolean;
+    private fnAfterConfigLoaded: Function;
+    private isReady: Promise<KitesCore>;
 
-    constructor(options?:IKitesOptions) {
+    constructor(options?: IKitesOptions) {
         super();
         // It may possible cause memory leaks from extensions
         this.setMaxListeners(0);
@@ -103,7 +103,7 @@ export class KitesCore extends EventEmitter {
      * @param {string} value
      * @param {string} defaultValue
      */
-    defaultPath(value:string, defaultValue:string) {
+    defaultPath(value: string, defaultValue: string) {
         if (typeof value === 'undefined') {
             return path.resolve(this.appDirectory, defaultValue || '');
         } else if (path.isAbsolute(value)) {
