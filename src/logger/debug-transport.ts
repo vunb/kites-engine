@@ -12,7 +12,7 @@ export class DebugTransport extends Transport {
     }
 
     log(level:string, msg:string, meta:any, callback:Function) {
-        this._debug.log(`${level} ${msg}`);
+        this._debug(`${level} ${msg}`);
         callback(null, true);
     }
 }
