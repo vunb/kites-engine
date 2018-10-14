@@ -31,15 +31,15 @@ export async function get(config:IDiscoverOptions) {
         // read file content
         let content = await readFile(pathToLocationCache, 'utf-8');
         let json = JSON.parse(content);
-        let extension = path.join(__dirname, '../../../');
-        let cache = json[extension];
+        let location = path.join(__dirname, '../../../');
+        let cache = json[location];
 
         if (!cache) {
             config.logger.info('Extensions location cache doesn\'t contain entry yet, crawling');
             return walkSync(config.rootDirectory, KITES_CONFIG_FILE);
         }
 
-        let extensionInfo = await stat(extension);
+        let extensionInfo = await stat(location);
         if (extensionInfo.mtime.getTime() > cache.lastSync) {
             config.logger.info('Extensions location cache ' + pathToLocationCache + ' contains older information, crawling');
             return walkSync(config.rootDirectory, KITES_CONFIG_FILE);
@@ -49,7 +49,7 @@ export async function get(config:IDiscoverOptions) {
         await Promise.all(cache.locations.map((dir:string) => stat(dir)));
         config.logger.info('Extensions location cache contains up to date information, skipping crawling in ' + config.rootDirectory);
 
-        let directories = walkSync(config.rootDirectory, KITES_CONFIG_FILE, extension);
+        let directories = walkSync(config.rootDirectory, KITES_CONFIG_FILE, location);
         let result = directories.concat(cache.locations);
         return result;
     } catch (err) {
@@ -59,16 +59,18 @@ export async function get(config:IDiscoverOptions) {
 }
 
 export async function save(extensions:Array<KitesExtention>, config:IDiscoverOptions) {
-    let extension = path.join(__dirname, '../../../');
+    let location = path.join(__dirname, '../../../');
     let directories = extensions
-        .map((e) => path.join(e.directory, KITES_CONFIG_FILE))
-        .filter(x => x.indexOf(extension) > -1);
+    .map((e) => path.join(e.directory, KITES_CONFIG_FILE))
+    .filter(x => x.indexOf(location) > -1);
 
     let tempDirectory = config.tempDirectory || os.tmpdir();
     let pathToLocationCache = path.join(tempDirectory, 'extensions');
+    let fileToLocationCache = path.join(pathToLocationCache, 'locations.json');
+    config.logger.info('Saving cache to location: ' + fileToLocationCache);
     await mkdirp(pathToLocationCache);
-    await (stat(pathToLocationCache).catch(() => writeFile(pathToLocationCache, JSON.stringify({}), 'utf-8')));
-    let content = await readFile(pathToLocationCache, 'utf-8');
+    await (stat(fileToLocationCache).catch(() => writeFile(fileToLocationCache, JSON.stringify({}), 'utf-8')));
+    let content = await readFile(fileToLocationCache, 'utf-8');
     let nodes:any = {};
     try {
         nodes = JSON.parse(content);
@@ -76,10 +78,10 @@ export async function save(extensions:Array<KitesExtention>, config:IDiscoverOpt
         // file is corrupted, nevermind and override all
     }
 
-    nodes[extension] = {
+    nodes[location] = {
         locations: directories,
         lastSync: new Date().getTime()
     }
-    config.logger.debug('Writing extension locations cache to ' + pathToLocationCache);
-    await writeFile(pathToLocationCache, JSON.stringify(nodes), 'utf-8');
+    await writeFile(fileToLocationCache, JSON.stringify(nodes), 'utf-8');
+    config.logger.info('Writing extension locations cache to ' + fileToLocationCache + ' done!');
 }
