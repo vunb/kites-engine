@@ -4,7 +4,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { KitesCore } from '../main';
 import { discover } from './discover';
-import { KitesExtention } from './extensions';
+import { ExtensionMainDefinition, KitesExtention } from './extensions';
 import sorter from './sorter';
 
 export class ExtensionsManager extends EventEmitter {
@@ -31,11 +31,11 @@ export class ExtensionsManager extends EventEmitter {
      * Use a kites extension
      * @param extension
      */
-    use(extension: Function|KitesExtention) {
+    use(extension: Function|KitesExtention|ExtensionMainDefinition) {
         if (typeof extension === 'function') {
             this.usedExtensions.push({
                 dependencies: [],
-                directory: this.kites.options.parentModuleDirectory,
+                directory: this.kites.parentModuleDirectory,
                 main: extension,
                 name: extension.name || '<no-name>'
             });
@@ -45,7 +45,7 @@ export class ExtensionsManager extends EventEmitter {
     }
 
     useMany(extensions: KitesExtention[]) {
-        var promises = extensions.map(this.useOne);
+        var promises = extensions.map((e) => this.useOne(e));
         return Promise.all(promises);
     }
 
@@ -63,10 +63,14 @@ export class ExtensionsManager extends EventEmitter {
             .then(() => {
                 if (typeof extension.main === 'function') {
                     extension.main.call(this, this.kites, extension);
-                } else {
+                    return Promise.resolve();
+                } else if (extension.directory) {
                     let extPath = path.join(extension.directory, extension.main);
                     let extModule = require(extPath);
                     extModule.call(this, this.kites, extension);
+                    return Promise.resolve();
+                } else {
+                    return Promise.reject('Invalid kites extension: ' + extension.name);
                 }
             })
             .then(() => {
@@ -76,8 +80,8 @@ export class ExtensionsManager extends EventEmitter {
                     this.kites.logger.debug(`Extension ${extension.name} was disabled`);
                 }
             })
-            .catch((err) => {
-                this.kites.logger.error('Error when loading extension ' + err + os.EOL + err.stack);
+            .catch((err: Error) => {
+                this.kites.logger.error('Error when loading extension ' + extension.name + os.EOL + err.stack);
             });
     }
 

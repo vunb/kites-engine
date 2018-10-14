@@ -17,6 +17,6 @@ export class DebugTransport extends Transport {
     }
 }
 
-export default function(options?: TransportOptions) {
-    return new DebugTransport(options);
+export default function InitDebugTransport(options?: TransportOptions) {
+    return DebugTransport.bind(options);
 }

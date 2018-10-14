@@ -12,6 +12,7 @@
         "member-access": false,
         "prefer-const": false,
         "trailing-comma": false,
+        "forin": false,
         "typedef-whitespace": [
             true,
             {
