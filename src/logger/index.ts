@@ -25,6 +25,10 @@ export default function InitDebugLogger(name: string): winston.LoggerInstance {
                 console.error('------------------------');
             }
         })
+    } else {
+        // remove all transports and add default Debug transport
+        winston.loggers.get(name).clear();
+        winston.loggers.get(name).add(new DebugTransport);
     }
 
     return winston.loggers.get(name);
