@@ -6,10 +6,20 @@
     "jsRules": {},
     "rules": {
         "no-console": false,
+        "no-var-keyword": false,
+        "ban-types": false,
+        "object-literal-shorthand": false,
+        "member-access": false,
+        "prefer-const": false,
+        "trailing-comma": false,
+        "typedef-whitespace": false,
+        "whitespace": false,
+        "arrow-parens": false,
+        "max-line-length": false,
+        "curly": false,
         "quotemark": [
             true,
-            "single",
-            "double",
+            "single"
         ]
     },
     "rulesDirectory": []

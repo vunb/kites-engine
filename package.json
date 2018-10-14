@@ -3,7 +3,7 @@
   "displayName": "kites",
   "version": "1.0.0",
   "description": "Core Engine of Kites",
-  "main": "dist/app.js",
+  "main": "dist/src/app.js",
   "scripts": {
     "build": "tsc && npm run lint",
     "clean": "rimraf ./dist",

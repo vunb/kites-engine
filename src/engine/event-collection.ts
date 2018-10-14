@@ -5,16 +5,16 @@ export interface ICollectionItem {
 }
 
 export class EventCollectionEmitter {
-    private _listeners: Array<ICollectionItem>;
-    private _pre: Array<Function>;
-    private _post: Array<Function>;
-    private _postFail: Array<Function>;
+    private listeners: ICollectionItem[];
+    private preHooks: Function[];
+    private postHooks: Function[];
+    private postFailHooks: Function[];
 
     constructor() {
-        this._listeners = [];
-        this._pre = [];
-        this._post = [];
-        this._postFail = [];
+        this.listeners = [];
+        this.preHooks = [];
+        this.postHooks = [];
+        this.postFailHooks = [];
     }
 
     /**
@@ -24,18 +24,18 @@ export class EventCollectionEmitter {
      * @param listener
      */
     add(key: string, context: Object|Function, listener?: Function) {
-        let _ctx = listener == null ? this: context;
-        let _fn = listener || context as Function;
+        let ctx = listener == null ? this: context;
+        let fn = listener || context as Function;
 
-        if(typeof _fn !== 'function') {
-            throw 'Listener must be a function!'
+        if(typeof fn !== 'function') {
+            throw new Error('Listener must be a function!');
         }
 
-        this._listeners.push({
-            key: key,
-            fn: _fn,
-            context: _ctx
-        })
+        this.listeners.push({
+            context: ctx,
+            fn: fn,
+            key: key
+        });
     }
 
     /**
@@ -43,7 +43,7 @@ export class EventCollectionEmitter {
      * @param key
      */
     remove(key:string) {
-        this._listeners = this._listeners.filter(x => x.key !== key)
+        this.listeners = this.listeners.filter(x => x.key !== key);
     }
 
     /**
@@ -51,7 +51,7 @@ export class EventCollectionEmitter {
      * @param fn
      */
     pre(fn: Function) {
-        this._pre.push(fn)
+        this.preHooks.push(fn);
     }
 
     /**
@@ -59,15 +59,15 @@ export class EventCollectionEmitter {
      * @param fn
      */
     post(fn: Function) {
-        this._post.push(fn)
+        this.postHooks.push(fn);
     }
 
     /**
      * add hook that will be executed after actual listener when execution will fail
      * @param fn
      */
-    postFail (fn: Function) {
-        this._postFail.push(fn)
+    postFail(fn: Function) {
+        this.postFailHooks.push(fn);
     }
 
     /**
@@ -76,32 +76,32 @@ export class EventCollectionEmitter {
      * @returns {Promise<U>}
      */
     async fire(...args: object[]) {
-        var self = this
+        var self = this;
 
-        function mapSeries (arr:Array<any>, next:Function) {
+        function mapSeries(arr:any[], next:Function) {
             // create a empty promise to start our series
             var currentPromise = Promise.resolve();
-            var promises = arr.map(async function (item) {
+            var promises = arr.map(async (item) => {
                 // execute the next function after the previous has resolved successfully
-                return (currentPromise = currentPromise.then(() => next(item)))
-            })
+                return (currentPromise = currentPromise.then(() => next(item)));
+            });
             // group the results for executing concurrently
             // and return the group promise
-            return Promise.all(promises)
+            return Promise.all(promises);
         }
 
-        function applyHook (listener:ICollectionItem, hookArrayName: string, outerArgs: Array<any>) {
-            var hooks = (<any>self)[hookArrayName];
+        function applyHook(listener:ICollectionItem, hookArrayName: string, outerArgs: any[]) {
+            var hooks = (self as any)[hookArrayName];
             hooks.forEach((hook:Function) => {
                 try {
-                    hook.apply(listener, outerArgs)
+                    hook.apply(listener, outerArgs);
                 } catch (err) {
                     console.warn('Event listener [' + hookArrayName + '] hook got an error!', err);
                 }
             });
         }
 
-        return await mapSeries(this._listeners, async (listener:ICollectionItem) => {
+        return await mapSeries(this.listeners, async (listener:ICollectionItem) => {
             if (!listener) {
                 return null;
             }

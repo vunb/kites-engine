@@ -1,25 +1,25 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * Delete file and folder
- * @param path path to delete
+ * @param pathToDelete path to delete
  */
-export function deleteFiles(path:string) {
+export function deleteFiles(pathToDelete:string) {
     try {
-        let files = fs.readdirSync(path);
+        let files = fs.readdirSync(pathToDelete);
         files.forEach(fn => {
-            let filePath = path + '/' + fn;
+            let filePath = pathToDelete + '/' + fn;
             if (fs.statSync(filePath).isFile()) {
-              fs.unlinkSync(filePath)
+                fs.unlinkSync(filePath);
             } else {
-                deleteFiles(filePath)
+                deleteFiles(filePath);
             }
         });
         // remove current dir
-        fs.rmdirSync(path);
+        fs.rmdirSync(pathToDelete);
     } catch (err) {
-        return
+        return;
     }
 }
 
@@ -37,7 +37,7 @@ export function walkSync(rootPath:string, fileName:string, exclude?:string|RegEx
 
     function dirname(fn:string) {
         let parts = path.dirname(fn).split(path.sep);
-        return parts[parts.length - 1]
+        return parts[parts.length - 1];
     }
 
     while (next) {
@@ -52,21 +52,22 @@ export function walkSync(rootPath:string, fileName:string, exclude?:string|RegEx
         list.forEach((it) => {
             let item = path.join(next as string, it);
             if (item.indexOf(exclude as string) > -1) {
-                return
+                return;
             }
 
             try {
                 if (fs.statSync(item).isDirectory()) {
-                    queue.push(item)
+                    queue.push(item);
                 }
             } catch (err) {
+                // do nothing if cannot get directory info
             }
 
             if (it === fileName) {
                 let extensionsDirectoryName = dirname(item);
-                let alreadyListedConfig = results.filter((fn) => extensionsDirectoryName === dirname(fn))
+                let alreadyListedConfig = results.filter((fn) => extensionsDirectoryName === dirname(fn));
                 if (!alreadyListedConfig.length) {
-                    results.push(item)
+                    results.push(item);
                 }
             }
         });
@@ -75,5 +76,3 @@ export function walkSync(rootPath:string, fileName:string, exclude?:string|RegEx
 
     return results;
 }
-
-

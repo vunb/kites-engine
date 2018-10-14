@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     /* Compile options*/
     "outDir": "dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": true,
     "lib": [
       "es2015",

@@ -1,7 +1,7 @@
-import * as _ from "lodash";
-import * as path from "path";
-import { LoggerInstance } from "winston";
-import * as cache from "./location-cache";
+import * as _ from 'lodash';
+import * as path from 'path';
+import { LoggerInstance } from 'winston';
+import * as cache from './location-cache';
 
 export interface IDiscoverOptions {
     readonly logger: LoggerInstance;
@@ -13,7 +13,7 @@ export interface IDiscoverOptions {
 }
 
 // cache variables
-var _availableExtensionsCache:any;
+var availableExtensionsCache: any;
 
 /**
  * Discover kites extensions
@@ -23,9 +23,9 @@ export async function discover(config: IDiscoverOptions) {
 
     config.logger.info('Searching for available extensions in ' + config.rootDirectory);
 
-    if (config.cacheAvailableExtensions && _availableExtensionsCache != null) {
-        config.logger.info(`Loading extensions from cache: count(${_availableExtensionsCache.length})`);
-        return Promise.resolve(_availableExtensionsCache);
+    if (config.cacheAvailableExtensions && availableExtensionsCache != null) {
+        config.logger.info(`Loading extensions from cache: count(${availableExtensionsCache.length})`);
+        return Promise.resolve(availableExtensionsCache);
     } else {
         let results = await cache.get(config);
         config.logger.info(`Found: ${results.length} extensions!`);
@@ -33,10 +33,10 @@ export async function discover(config: IDiscoverOptions) {
             let extension = require(configFile);
             return _.extend({
                 directory: path.dirname(configFile)
-            }, extension)
+            }, extension);
         });
 
-        _availableExtensionsCache = availableExtensions;
+        availableExtensionsCache = availableExtensions;
         await cache.save(availableExtensions, config);
         return availableExtensions;
     }

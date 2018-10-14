@@ -1,12 +1,12 @@
-import os from "os";
-import path from "path";
-import _fs from "fs";
-import _mkdirp from "mkdirp";
-import {promisify} from "util";
+import _fs from 'fs';
+import _mkdirp from 'mkdirp';
+import os from 'os';
+import path from 'path';
+import {promisify} from 'util';
 
-import { IDiscoverOptions } from "./discover";
-import { KitesExtention } from "./extensions";
-import { walkSync } from "./fs";
+import { IDiscoverOptions } from './discover';
+import { KitesExtention } from './extensions';
+import { walkSync } from './fs';
 
 const mkdirp = promisify(_mkdirp);
 const stat = promisify(_fs.stat);
@@ -58,7 +58,7 @@ export async function get(config:IDiscoverOptions) {
     }
 }
 
-export async function save(extensions:Array<KitesExtention>, config:IDiscoverOptions) {
+export async function save(extensions:KitesExtention[], config:IDiscoverOptions) {
     let location = path.join(__dirname, '../../../');
     let directories = extensions
     .map((e) => path.join(e.directory, KITES_CONFIG_FILE))
@@ -79,9 +79,10 @@ export async function save(extensions:Array<KitesExtention>, config:IDiscoverOpt
     }
 
     nodes[location] = {
-        locations: directories,
-        lastSync: new Date().getTime()
-    }
+        lastSync: new Date().getTime(),
+        locations: directories
+    };
+
     await writeFile(fileToLocationCache, JSON.stringify(nodes), 'utf-8');
     config.logger.info('Writing extension locations cache to ' + fileToLocationCache + ' done!');
 }

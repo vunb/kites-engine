@@ -1,22 +1,22 @@
-import debug from "debug";
-import { Transport, TransportOptions } from "winston";
+import debug from 'debug';
+import { Transport, TransportOptions } from 'winston';
 
 export class DebugTransport extends Transport {
 
-    private _debug:debug.IDebugger;
+    private debugger: debug.IDebugger;
 
-    constructor(options?:TransportOptions) {
-        super(options)
+    constructor(options?: TransportOptions) {
+        super(options);
         this.name = 'debug';
-        this._debug = debug('kites');
+        this.debugger = debug('kites');
     }
 
-    log(level:string, msg:string, meta:any, callback:Function) {
-        this._debug(`${level} ${msg}`);
+    public log(level: string, msg: string, meta: any, callback: Function) {
+        this.debugger(`${level} ${msg}`);
         callback(null, true);
     }
 }
 
-export default function (options?:TransportOptions) {
-    return new DebugTransport(options)
+export default function(options?: TransportOptions) {
+    return new DebugTransport(options);
 }

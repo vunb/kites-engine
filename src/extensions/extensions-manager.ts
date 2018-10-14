@@ -1,14 +1,14 @@
-import { EventEmitter } from "events";
-import { KitesCore } from "../main";
-import { KitesExtention } from "./extensions";
+import { EventEmitter } from 'events';
+import { KitesCore } from '../main';
+import { KitesExtention } from './extensions';
 
 export class ExtensionsManager extends EventEmitter {
-    kites:KitesCore;
-    availableExtensions:Array<KitesExtention>;
-    usedExtensions:Array<KitesExtention>;
+    protected kites: KitesCore;
+    protected availableExtensions: KitesExtention[];
+    protected usedExtensions: KitesExtention[];
 
-    constructor(kites:KitesCore) {
-        super()
+    constructor(kites: KitesCore) {
+        super();
 
         this.kites = kites;
         this.availableExtensions = [];
@@ -16,8 +16,7 @@ export class ExtensionsManager extends EventEmitter {
     }
 
     get extensions() {
-        return this.availableExtensions.filter((e) => !e.options || e.options.enabled !== false)
+        return this.availableExtensions.filter((e) => !e.options || e.options.enabled !== false);
     }
-
 
 }

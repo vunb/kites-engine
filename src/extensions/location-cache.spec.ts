@@ -1,14 +1,14 @@
-import { expect } from "chai";
-import { resolve } from "path";
+import { expect } from 'chai';
+import { resolve } from 'path';
 
-import * as cache from "./location-cache";
-import InitDebugLogger from "../logger";
+import InitDebugLogger from '../logger';
+import * as cache from './location-cache';
 
 describe('Location cache', () => {
 
     before(() => {
       // remove ~/test/cache folder before test
-    })
+    });
 
     it('should get one and save it!', async () => {
         let extensions:any = await cache.get({
@@ -17,5 +17,5 @@ describe('Location cache', () => {
         });
         console.log('Found: ', extensions);
         expect(extensions.length).eq(1);
-    })
-})
+    });
+});

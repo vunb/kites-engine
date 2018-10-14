@@ -1,16 +1,16 @@
-import * as _ from "lodash";
-import * as fs from "fs";
-import * as path from "path";
-import * as appRoot from "app-root-path";
-import * as nconf from "nconf";
-import {LoggerInstance, MemoryTransportInstance} from "winston";
+import * as appRoot from 'app-root-path';
+import * as fs from 'fs';
+import * as _ from 'lodash';
+import * as nconf from 'nconf';
+import * as path from 'path';
+import {LoggerInstance, MemoryTransportInstance} from 'winston';
 
-import { EventEmitter } from "events";
-import { EventCollectionEmitter } from "./event-collection";
-import { ExtensionsManager } from "../extensions/extensions-manager";
-import { ILogger, DebugTransport } from "../logger";
+import { EventEmitter } from 'events';
+import { ExtensionsManager } from '../extensions/extensions-manager';
+import InitDebugLogger from '../logger';
+import { EventCollectionEmitter } from './event-collection';
 
-import pkg from "../../package.json";
+import pkg from '../../package.json';
 
 export interface IKitesOptions {
     readonly discover:boolean;
@@ -18,7 +18,7 @@ export interface IKitesOptions {
     readonly appDirectory:string;
     readonly parentModuleDirectory:string;
     readonly env:string;
-    readonly logger:ILogger;
+    readonly logger:LoggerInstance;
 }
 
 export class KitesCore extends EventEmitter {
@@ -28,10 +28,10 @@ export class KitesCore extends EventEmitter {
     options:IKitesOptions;
     initializeListeners:EventCollectionEmitter;
     extensionsManager:ExtensionsManager;
-    logger:ILogger;
-    private _initialized:boolean;
-    private _fnAfterConfigLoaded:Function;
-    private _ready:Promise<KitesCore>;
+    logger:LoggerInstance;
+    private initialized:boolean;
+    private fnAfterConfigLoaded:Function;
+    private isReady:Promise<KitesCore>;
 
     constructor(options?:IKitesOptions) {
         super();
@@ -47,25 +47,25 @@ export class KitesCore extends EventEmitter {
 
         // properties
         // this.logger = this._initWinston();
-        this._initialized = false;
-        this._fnAfterConfigLoaded = () => this;
-        this._ready = new Promise((resolve) => {
+        this.initialized = false;
+        this.fnAfterConfigLoaded = () => this;
+        this.isReady = new Promise((resolve) => {
             this.on('initialized', resolve);
-        })
+        });
 
     }
 
     get defaults() {
         let parent = module.parent || module;
         return {
-            discover: true,
-            rootDirectory: path.resolve(__dirname, '../../../'),
             appDirectory: appRoot.toString(),
-            parentModuleDirectory: path.dirname(parent.filename),
+            discover: true,
             env: process.env.NODE_ENV || 'development',
             logger: {
                 silent: false
-            }
+            },
+            parentModuleDirectory: path.dirname(parent.filename),
+            rootDirectory: path.resolve(__dirname, '../../../'),
         };
     }
 

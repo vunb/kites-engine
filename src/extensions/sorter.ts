@@ -1,4 +1,4 @@
-import { KitesExtention } from "./extensions";
+import { KitesExtention } from './extensions';
 
 export default function sorter(ea: KitesExtention, eb: KitesExtention) {
     // Extension is a node module
