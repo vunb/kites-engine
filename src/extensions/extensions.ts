@@ -1,5 +1,7 @@
 export class KitesExtention {
-    options: boolean|any;
+    main: Function;
+    name: string;
+    options?: boolean|any;
     directory: string;
     dependencies: Array<string|Function>;
 }

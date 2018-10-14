@@ -13,12 +13,18 @@ import { EventCollectionEmitter } from './event-collection';
 import pkg from '../../package.json';
 
 export interface IKitesOptions {
-    readonly discover: boolean;
-    readonly rootDirectory: string;
-    readonly appDirectory: string;
-    readonly parentModuleDirectory: string;
-    readonly env: string;
-    readonly logger: LoggerInstance;
+    [key: string]: any;
+    discover: boolean;
+    rootDirectory: string;
+    appDirectory: string;
+    parentModuleDirectory: string;
+    env: string;
+    logger: any;
+    mode: string;
+    cacheAvailableExtensions: any;
+    tempDirectory: string;
+    extensionsLocationCache: string;
+    extensions?: string[];
 }
 
 export class KitesCore extends EventEmitter {
@@ -113,21 +119,75 @@ export class KitesCore extends EventEmitter {
         }
     }
 
-    init() {
-        // return this._initOptions().then(() => {
-        //     if (this.options.logger && this.options.logger.silent === true) {
-        //         this._silentLogs(this.logger);
-        //     }
-
-        //     this.logger.info(`Initializing ${this.name}@${this.version} in mode "${this.options.env}"${this.options.loadConfig? ', using configuration file ' + this.options.configFile : ''}`);
-        //     return this.extensionsManager.init();
-        // }).then(() => {
-        //     return this.initializeListeners.fire();
-        // }).then(() => {
-        //     this.logger.info('kites initialized!');
-        //     this._initialized = true;
-        //     this.emit('initialized', this);
-        //     return this;
-        // })
+    /**
+     * Kites fire on ready
+     * @param callback
+     */
+    ready(callback: Function) {
+        this.isReady.then((kites) => callback(kites));
+        return this;
     }
+
+    /**
+     * Use a function as a kites extension
+     * TODO: pass string to load folder and discover extension Function in this path
+     * @param extension
+     */
+    use(extension: Function) {
+        this.extensionsManager.use(extension);
+    }
+
+    /**
+     * Enable auto discover extensions
+     */
+    discover() {
+        this.options.discover = true;
+        return this;
+    }
+
+    /**
+     * Assign config loaded callback
+     * @param fn Function
+     */
+    afterConfigLoaded(fn: Function) {
+        this.fnAfterConfigLoaded = fn;
+        return this;
+    }
+
+    /**
+     * Kites initialize
+     */
+    async init() {
+        await this._initOptions();
+        this.logger.info(`Initializing ${this.name}@${this.version} in mode "${this.options.env}"${this.options.loadConfig ? ', using configuration file ' + this.options.configFile : ''}`);
+
+        if (this.options.logger && this.options.logger.silent === true) {
+            await this._silentLogs(this.logger);
+        }
+
+        await this.extensionsManager.init();
+        await this.initializeListeners.fire();
+
+        this.logger.info('kites initialized!');
+        this.initialized = true;
+        this.emit('initialized', this);
+        return this;
+    }
+
+    private _initOptions() {
+        return Promise.reject('Not implement!');
+    }
+
+    private _silentLogs(logger: LoggerInstance) {
+        if (logger.transports) {
+            _.keys(logger.transports).forEach((name) => {
+                logger.transports[name].silent = true;
+            });
+        }
+    }
+
+    private _loadConfig() {
+        return Promise.reject('Not implement!');
+    }
+
 }
