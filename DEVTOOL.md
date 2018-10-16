@@ -5,6 +5,9 @@
 * yarn ^1.7.0
 * typescript ^3.1.2
 * tslint ^5.11.0
+* ts-node ^7.0.1
+* mocha ^5.2.0
+* chai ^4.2.0
 
 # Installation Scripts
 
