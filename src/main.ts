@@ -1,4 +1,5 @@
-import {IKitesOptions} from './engine/kites';
+import * as path from 'path';
+import {IKitesOptions, KitesCore} from './engine/kites';
 
 export {
   EventCollectionEmitter,
@@ -11,5 +12,10 @@ export {KitesCore, IKitesOptions} from './engine/kites';
  * @param options
  */
 export default function(options: IKitesOptions) {
+    let parent = module.parent || module;
+    let opts = Object.assign({
+        parentModuleDirectory: path.dirname(parent.filename)
+    }, options);
     // init a new kites
+    return new KitesCore(opts);
 }
